@@ -7,20 +7,6 @@ Homework 02: Explore Gapminder and use dplyr
 Bring rectangular data in
 -------------------------
 
-Work with the `gapminder` data we explored in class. *If you really want to, you can explore a different dataset. Self-assess the suitability of your dataset by reading [this issue](https://github.com/STAT545-UBC/Discussion/issues/115), and if you still aren't sure if it's suitable, send Vincenzo an email.*
-
-The Gapminder data is distributed as an R package from [CRAN](https://cran.r-project.org/web/packages/gapminder/index.html).
-
-Install it if you have not done so already and remember to load it.
-
-    install.packages("gapminder")
-    library(gapminder)
-
-Install and load dplyr. Probably via the tidyverse meta-package.
-
-    install.packages("tidyverse")
-    library(tidyverse)
-
 ``` r
 library(gapminder)
 library(tidyverse)
@@ -87,8 +73,6 @@ From `str`, we can see the type for each variable.
 -   lifeExp is num
 -   pop is int
 -   gdpPercap is num
-
-Be sure to justify your answers by calling the appropriate R functions.
 
 Explore individual variables
 ----------------------------
@@ -215,39 +199,63 @@ Practice piping together `filter()` and `select()`. Possibly even piping into `g
 Alvin's Exploration Plots
 -------------------------
 
+### Life Expectancy and Years
+
+``` r
+gapminder %>%
+  ggplot(aes(x = year, y = lifeExp, color = country)) +
+  geom_line(lwd = 0.5, show.legend = FALSE) + 
+  facet_wrap(~ continent) +
+  theme_bw()
+```
+
+![](hw02_gapminder_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+*Here, I plot the lifeExp of each country as a different colour of the years. Over time, life expenctancy increases. I decided to pipe in the gapminder dataset with `%>%`. Additional things I did were to hide the legend, change the line width, change to bw theme, and facet by the different continents.*
+
+### GDP per Capita and continent
+
+``` r
+ggplot(gapminder, aes(x = continent, y = gdpPercap)) +
+  scale_y_log10() +
+  theme_bw() +
+  geom_violin(aes(fill = continent), show.legend = FALSE) +
+  geom_jitter(alpha = 0.2)
+```
+
+![](hw02_gapminder_files/figure-markdown_github/unnamed-chunk-11-1.png)
+
+*Now, I want to look at the distrubition of GDP per capita for each continent. There is a violin plot, with different fill for each continent. Overlaid is a jitter plot for each point to better visualize distributaion. I've chosen a log Y scale for the GDP per cap. We can see the African countries are amongst the poorest. However, there is a skew, with a few rather wealthier African countries. Given the log scale, this highlights great disparity. Simila observation with Asian countries, showing a wide spread.*
+
+Life Expectancy and GDP per capita
+----------------------------------
+
+``` r
+gapminder %>%
+  filter(continent == "Asia") %>%
+  ggplot(aes(x = lifeExp, y = gdpPercap, colour = year)) +
+  geom_point() +
+  scale_y_log10() +
+  theme_bw() +
+  geom_smooth(method = "lm") +
+  scale_colour_gradient(low = "white", high = "darkblue")
+```
+
+![](hw02_gapminder_files/figure-markdown_github/unnamed-chunk-12-1.png)
+
+*This time, I `filter` for Asian countries. I look at the relationship between lifeExp and gdpPercap, which is a postive trend (demonstrated with the geom\_smooth). The GDP is on a log Y scale again. Additionally, I coloured the points, by year. We can see that the more recent years have a tread of higher lifeExp and higher GDP.*
+
 But I want to do more!
 ----------------------
+
+### More with `dplyr`
+
+I want to demonstrate the transmutate function.
+
+### Even more
 
 *For people who want to take things further.*
 
 Evaluate this code and describe the result. Presumably the analyst's intent was to get the data for Rwanda and Afghanistan. Did they succeed? Why or why not? If not, what is the correct way to do this?
 
     filter(gapminder, country == c("Rwanda", "Afghanistan"))
-
-Read [What I do when I get a new data set as told through tweets](http://simplystatistics.org/2014/06/13/what-i-do-when-i-get-a-new-data-set-as-told-through-tweets/) from [SimplyStatistics](http://simplystatistics.org) to get some ideas!
-
-Present numerical tables in a more attractive form, such as using `knitr::kable()`.
-
-Use more of the dplyr functions for operating on a single table.
-
-Adapt exercises from the chapters in the "Explore" section of [R for Data Science](http://r4ds.had.co.nz) to the Gapminder dataset.
-
-Reflection
-----------
-
-Once you're done the above, go back to [UBC canvas](https://canvas.ubc.ca/), and find the "Homework 02" page. Here, you should submit a reflection (and, although not required, adding a link to your homework respository would be helpful for the markers).
-
-Please don't skip this reflection! We really care about this.
-
-Reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. What things were hard, even though you saw them in class? What was easy(-ish) even though we haven't done it in class?
-
-Special Submission Cases
-------------------------
-
-**Are you worried about submitting early, and then wanting to make changes that are included in your submission?**
-
-Don't be. We'll always grade your GitHub repository as it was at the last commit prior to the deadline. Therefore, we encourage you to submit early and often, especially regarding your GitHub repository!
-
-**Want to submit early, and continue making contributions to your repository that you *don't* want to be graded?**
-
-Just [create a release](https://help.github.com/articles/creating-releases/) of your homework repo, and include the link to this release in your submission, being sure to indicate that this is a special early release that you want graded. Or, even better, just fork the repo.
