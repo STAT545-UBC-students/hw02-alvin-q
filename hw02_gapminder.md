@@ -59,7 +59,7 @@ str(gapminder)
     ##  $ pop      : int  8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
     ##  $ gdpPercap: num  779 821 853 836 740 ...
 
-The output shows that the gapminder is a data frame (Classes are ‘tbl\_df’, ‘tbl’ and 'data.frame'). There are 6 columns/variables and 1704 rows/observations.
+*The output shows that the gapminder is a data frame (Classes are ‘tbl\_df’, ‘tbl’ and 'data.frame'). There are 6 columns/variables and 1704 rows/observations.*
 
 -   Can you get these facts about "extent" or "size" in more than one way? Can you imagine different functions being useful in different contexts?
 
@@ -75,7 +75,7 @@ ncol(gapminder)
 
     ## [1] 6
 
-Using `ncol` and `nrow` is another way to get these dimensions. While `str` gives us more information, these 2 can be useful, especially if you want to use just the number of rows/cols. One might do so to calculate mean or loop through columns.
+*Using `ncol` and `nrow` is another way to get these dimensions. While `str` gives us more information, these 2 can be useful, especially if you want to use just the number of rows/cols. One might do so to calculate mean or loop through columns.*
 
 -   What data type is each variable?
 
@@ -99,6 +99,101 @@ Pick **at least** one categorical variable and at least one quantitative variabl
 -   What values are typical? What's the spread? What's the distribution? Etc., tailored to the variable at hand.
 -   Feel free to use summary stats, tables, figures. We're NOT expecting high production value (yet).
 
+*We can see a summary with of all the variable using `summary`.*
+
+``` r
+summary(gapminder)
+```
+
+    ##         country        continent        year         lifeExp     
+    ##  Afghanistan:  12   Africa  :624   Min.   :1952   Min.   :23.60  
+    ##  Albania    :  12   Americas:300   1st Qu.:1966   1st Qu.:48.20  
+    ##  Algeria    :  12   Asia    :396   Median :1980   Median :60.71  
+    ##  Angola     :  12   Europe  :360   Mean   :1980   Mean   :59.47  
+    ##  Argentina  :  12   Oceania : 24   3rd Qu.:1993   3rd Qu.:70.85  
+    ##  Australia  :  12                  Max.   :2007   Max.   :82.60  
+    ##  (Other)    :1632                                                
+    ##       pop              gdpPercap       
+    ##  Min.   :6.001e+04   Min.   :   241.2  
+    ##  1st Qu.:2.794e+06   1st Qu.:  1202.1  
+    ##  Median :7.024e+06   Median :  3531.8  
+    ##  Mean   :2.960e+07   Mean   :  7215.3  
+    ##  3rd Qu.:1.959e+07   3rd Qu.:  9325.5  
+    ##  Max.   :1.319e+09   Max.   :113523.1  
+    ## 
+
+*I have chosen to explore gdpPercap and continent*
+
+### Exploring "gdpPercap"
+
+*I can see a summary of gdpPercap specifically that contains its min, max, mean, median, 1st quartile and 3rd quartile.*
+
+``` r
+summary(gapminder$gdpPercap)
+```
+
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ##    241.2   1202.1   3531.8   7215.3   9325.5 113523.1
+
+*Alternatively, I can calculate several of these individually.*
+
+``` r
+min(gapminder$gdpPercap)
+```
+
+    ## [1] 241.1659
+
+``` r
+max(gapminder$gdpPercap)
+```
+
+    ## [1] 113523.1
+
+``` r
+mean(gapminder$gdpPercap)
+```
+
+    ## [1] 7215.327
+
+``` r
+median(gapminder$gdpPercap)
+```
+
+    ## [1] 3531.847
+
+*I can get a sense of the distribution of the data by looking at its variance or standard deviation.*
+
+``` r
+var(gapminder$gdpPercap)
+```
+
+    ## [1] 97169410
+
+``` r
+sd(gapminder$gdpPercap)
+```
+
+    ## [1] 9857.455
+
+### Exploring "continent"
+
+*Since continent is a factor, let's look at its levels.*
+
+``` r
+levels(gapminder$continent)
+```
+
+    ## [1] "Africa"   "Americas" "Asia"     "Europe"   "Oceania"
+
+*There are 5 different levels. We can count them with `summary` as well to see how many of the data points fall in each continent.*
+
+``` r
+summary(gapminder$continent)
+```
+
+    ##   Africa Americas     Asia   Europe  Oceania 
+    ##      624      300      396      360       24
+
 Explore various plot types
 --------------------------
 
@@ -116,6 +211,9 @@ Use `filter()`, `select()` and `%>%`
 Use `filter()` to create data subsets that you want to plot.
 
 Practice piping together `filter()` and `select()`. Possibly even piping into `ggplot()`.
+
+Alvin's Exploration Plots
+-------------------------
 
 But I want to do more!
 ----------------------

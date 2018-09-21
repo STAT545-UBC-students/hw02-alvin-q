@@ -44,7 +44,7 @@ Explore the `gapminder` object:
 str(gapminder)
 ```
 
-The output shows that the gapminder is a data frame (Classes are ‘tbl_df’, ‘tbl’ and 'data.frame'). There are 6 columns/variables and 1704 rows/observations.
+*The output shows that the gapminder is a data frame (Classes are ‘tbl_df’, ‘tbl’ and 'data.frame'). There are 6 columns/variables and 1704 rows/observations.*
 
 * Can you get these facts about "extent" or "size" in more than one way? Can you imagine different functions being useful in different contexts?
 
@@ -53,7 +53,7 @@ nrow(gapminder)
 ncol(gapminder)
 ```
 
-Using `ncol` and `nrow` is another way to get these dimensions. While `str` gives us more information, these 2 can be useful, especially if you want to use just the number of rows/cols. One might do so to calculate mean or loop through columns.
+*Using `ncol` and `nrow` is another way to get these dimensions. While `str` gives us more information, these 2 can be useful, especially if you want to use just the number of rows/cols. One might do so to calculate mean or loop through columns.*
 
 * What data type is each variable?
 
@@ -76,6 +76,50 @@ Pick __at least__ one categorical variable and at least one quantitative variabl
 * What values are typical? What's the spread? What's the distribution? Etc., tailored to the variable at hand.
 * Feel free to use summary stats, tables, figures. We're NOT expecting high production value (yet).
 
+*We can see a summary with of all the variable using `summary`.*
+
+```{r}
+summary(gapminder)
+```
+
+*I have chosen to explore gdpPercap and continent*
+
+### Exploring "gdpPercap"
+
+*I can see a summary of gdpPercap specifically that contains its min, max, mean, median, 1st quartile and 3rd quartile.*
+```{r}
+summary(gapminder$gdpPercap)
+```
+
+*Alternatively, I can calculate several of these individually.*
+```{r}
+min(gapminder$gdpPercap)
+max(gapminder$gdpPercap)
+mean(gapminder$gdpPercap)
+median(gapminder$gdpPercap)
+```
+
+*I can get a sense of the distribution of the data by looking at its variance or standard deviation.*
+
+```{r}
+var(gapminder$gdpPercap)
+sd(gapminder$gdpPercap)
+```
+
+### Exploring "continent"
+
+*Since continent is a factor, let's look at its levels.*
+
+```{r}
+levels(gapminder$continent)
+```
+
+*There are 5 different levels. We can count them with `summary` as well to see how many of the data points fall in each continent.*
+
+```{r}
+summary(gapminder$continent)
+```
+
 ## Explore various plot types
 
 Make a few plots, probably of the same variable you chose to characterize numerically. You can use the plot types we went over in class (cm006) to get an idea of what you'd like to make. Try to explore more than one plot type. **Just as an example** of what I mean:
@@ -91,6 +135,9 @@ You don't have to use all the data in every plot! It's fine to filter down to on
 Use `filter()` to create data subsets that you want to plot.
 
 Practice piping together `filter()` and `select()`. Possibly even piping into `ggplot()`.
+
+## Alvin's Exploration Plots
+
 
 ## But I want to do more!
 
