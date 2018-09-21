@@ -162,7 +162,15 @@ gapminder %>%
 
 ### More with `dplyr`
 
-I want to demonstrate the transmutate function. 
+I want to demonstrate the `mutate` function. 
+
+```{r}
+gapminder %>%
+  select(country, year, pop, gdpPercap) %>%
+  mutate(GDP = pop * gdpPercap)
+```
+
+*First, I take gapminder and using pipes, I select for a few relevant columns. GDP per capita is GDP divided by population. I want a new column with GDP. Using `dplyr::mutate`, I make a new column, GDP, which is the total pop X gdpPercap.*
 
 ### Even more
 
@@ -170,7 +178,14 @@ I want to demonstrate the transmutate function.
 
 Evaluate this code and describe the result. Presumably the analyst's intent was to get the data for Rwanda and Afghanistan. Did they succeed? Why or why not? If not, what is the correct way to do this?
 
-```
+```{r}
 filter(gapminder, country == c("Rwanda", "Afghanistan"))
 ```
+This is not correct. Note there is missing data.
 
+```{r}
+filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+
+filter(gapminder, country == "Rwanda" | country == "Afghanistan")
+```
+Here are 2 possible solution. One uses `|` as an OR statement. The other uses `%in%`.

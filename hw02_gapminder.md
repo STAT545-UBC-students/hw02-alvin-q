@@ -250,7 +250,30 @@ But I want to do more!
 
 ### More with `dplyr`
 
-I want to demonstrate the transmutate function.
+I want to demonstrate the `mutate` function.
+
+``` r
+gapminder %>%
+  select(country, year, pop, gdpPercap) %>%
+  mutate(GDP = pop * gdpPercap)
+```
+
+    ## # A tibble: 1,704 x 5
+    ##    country      year      pop gdpPercap          GDP
+    ##    <fct>       <int>    <int>     <dbl>        <dbl>
+    ##  1 Afghanistan  1952  8425333      779.  6567086330.
+    ##  2 Afghanistan  1957  9240934      821.  7585448670.
+    ##  3 Afghanistan  1962 10267083      853.  8758855797.
+    ##  4 Afghanistan  1967 11537966      836.  9648014150.
+    ##  5 Afghanistan  1972 13079460      740.  9678553274.
+    ##  6 Afghanistan  1977 14880372      786. 11697659231.
+    ##  7 Afghanistan  1982 12881816      978. 12598563401.
+    ##  8 Afghanistan  1987 13867957      852. 11820990309.
+    ##  9 Afghanistan  1992 16317921      649. 10595901589.
+    ## 10 Afghanistan  1997 22227415      635. 14121995875.
+    ## # ... with 1,694 more rows
+
+*First, I take gapminder and using pipes, I select for a few relevant columns. GDP per capita is GDP divided by population. I want a new column with GDP. Using `dplyr::mutate`, I make a new column, GDP, which is the total pop X gdpPercap.*
 
 ### Even more
 
@@ -258,4 +281,64 @@ I want to demonstrate the transmutate function.
 
 Evaluate this code and describe the result. Presumably the analyst's intent was to get the data for Rwanda and Afghanistan. Did they succeed? Why or why not? If not, what is the correct way to do this?
 
-    filter(gapminder, country == c("Rwanda", "Afghanistan"))
+``` r
+filter(gapminder, country == c("Rwanda", "Afghanistan"))
+```
+
+    ## # A tibble: 12 x 6
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  2 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  3 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  4 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  5 Afghanistan Asia       1997    41.8 22227415      635.
+    ##  6 Afghanistan Asia       2007    43.8 31889923      975.
+    ##  7 Rwanda      Africa     1952    40    2534927      493.
+    ##  8 Rwanda      Africa     1962    43    3051242      597.
+    ##  9 Rwanda      Africa     1972    44.6  3992121      591.
+    ## 10 Rwanda      Africa     1982    46.2  5507565      882.
+    ## 11 Rwanda      Africa     1992    23.6  7290203      737.
+    ## 12 Rwanda      Africa     2002    43.4  7852401      786.
+
+This is not correct. Note there is missing data.
+
+``` r
+filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+```
+
+    ## # A tibble: 24 x 6
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1952    28.8  8425333      779.
+    ##  2 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  3 Afghanistan Asia       1962    32.0 10267083      853.
+    ##  4 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  5 Afghanistan Asia       1972    36.1 13079460      740.
+    ##  6 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  7 Afghanistan Asia       1982    39.9 12881816      978.
+    ##  8 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  9 Afghanistan Asia       1992    41.7 16317921      649.
+    ## 10 Afghanistan Asia       1997    41.8 22227415      635.
+    ## # ... with 14 more rows
+
+``` r
+filter(gapminder, country == "Rwanda" | country == "Afghanistan")
+```
+
+    ## # A tibble: 24 x 6
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1952    28.8  8425333      779.
+    ##  2 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  3 Afghanistan Asia       1962    32.0 10267083      853.
+    ##  4 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  5 Afghanistan Asia       1972    36.1 13079460      740.
+    ##  6 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  7 Afghanistan Asia       1982    39.9 12881816      978.
+    ##  8 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  9 Afghanistan Asia       1992    41.7 16317921      649.
+    ## 10 Afghanistan Asia       1997    41.8 22227415      635.
+    ## # ... with 14 more rows
+
+Here are 2 possible solution. One uses `|` as an OR statement. The other uses `%in%`.
